@@ -47,7 +47,14 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
+        'xml' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/create_xml'),
+        ],
+        'qrcodes' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/qrcodes'),
+        ],
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
