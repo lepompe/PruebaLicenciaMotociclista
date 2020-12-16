@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class API2Controller extends Controller
 {
-    //
+    public function crearqr(){
+        
+    }
 }

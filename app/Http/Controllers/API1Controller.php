@@ -53,13 +53,29 @@ class API1Controller extends Controller
                                 if(empty($data->ews_llave) || 
                                 empty($data->ews_id_tramite) || 
                                 empty($data->ews_no_solicitud) || 
-                                empty($data->ews_fecha_solicitud) || 
+                                empty($data->ews_fecha_solicitud) ||
+                                empty($data->ews_hora_solicitud || 
                                 empty($data->ews_nombre) ||
                                 empty($data->ews_apellido_paterno) ||
                                 empty($data->ews_apellido_materno) ||
                                 empty($data->ews_curp) ||
                                 empty($data->ews_licencia) ||
-                                empty($data->ews_hora_solicitud)
+                                empty($data->ews_edad) ||
+                                empty($data->ews_lugar_nacimiento) ||
+                                empty($data->ews_telefono) ||
+                                empty($data->ews_nombre_avisar) ||
+                                empty($data->ews_apellido_paterno_avisar) ||
+                                empty($data->ews_apellido_materno_avisar) ||
+                                empty($data->ews_direccion_avisar) ||
+                                empty($data->ews_telefono_avisar) ||
+                                empty($data->ews_agudeza_visual) ||
+                                empty($data->ews_lentes) ||
+                                empty($data->ews_tipo_sanguineo) ||
+                                empty($data->ews_estatura) ||
+                                empty($data->ews_padecimientos) ||
+                                empty($data->ews_donador) ||
+                                empty($data->ews_vigencia)
+                                )
                                 ){
 
                                         $saveAcceso = new TokenAcceso;
