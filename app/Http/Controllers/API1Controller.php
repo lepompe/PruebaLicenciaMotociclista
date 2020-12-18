@@ -7,6 +7,7 @@ use App\Estado;
 use App\Solicitud;
 use App\Token;
 use App\TokenAcceso;
+use App\datoGral;
 
 class API1Controller extends Controller
 {
@@ -25,10 +26,10 @@ class API1Controller extends Controller
                         "ews_id_tramite" => strip_tags(trim($request->input('ews_id_tramite'))),
                         "ews_fecha_solicitud" => strip_tags(trim($request->input('ews_fecha_solicitud'))),
                         "ews_hora_solicitud" => strip_tags(trim($request->input('ews_hora_solicitud'))),
-                        "ews_nombre" => strip_tags(trim($request->input('ews_nombre'))),
-                        "ews_apellido_paterno" => strip_tags(trim($request->input('ews_apellido_paterno'))),
-                        "ews_apellido_materno" => strip_tags(trim($request->input('ews_apellido_materno'))),
-                        "ews_curp" => strip_tags(trim($request->input('ews_curp'))),
+                        "ews_nombre" => strip_tags(trim($request->input('ews_nombre_sw'))),
+                        "ews_apellido_paterno" => strip_tags(trim($request->input('ews_apellido_paterno_sw'))),
+                        "ews_apellido_materno" => strip_tags(trim($request->input('ews_apellido_materno_sw'))),
+                        "ews_curp" => strip_tags(trim($request->input('ews_curp_sw'))),
                         "ews_licencia" => strip_tags(trim($request->input('ews_licencia'))),
                         "ews_edad" => strip_tags(trim($request->input('ews_edad'))),
                         "ews_lugar_nacimiento" => strip_tags(trim($request->input('ews_lugar_nacimiento'))),
@@ -40,7 +41,7 @@ class API1Controller extends Controller
                         "ews_telefono_avisar" => strip_tags(trim($request->input('ews_telefono_avisar'))),
                         "ews_agudeza_visual" => strip_tags(trim($request->input('ews_agudeza_visual'))),
                         "ews_lentes" => strip_tags(trim($request->input('ews_lentes'))),
-                        "ews_tipo_sanguineo" => strip_tags(trim($request->input('ews_tipo_sanguineo'))),
+                        "ews_tipo_sangre" => strip_tags(trim($request->input('ews_tipo_sanguineo'))),
                         "ews_estatura" => strip_tags(trim($request->input('ews_estatura'))),
                         "ews_padecimientos" => strip_tags(trim($request->input('ews_padecimientos'))),
                         "ews_donador" => strip_tags(trim($request->input('ews_donador'))),
@@ -54,7 +55,7 @@ class API1Controller extends Controller
                                 empty($data->ews_id_tramite) || 
                                 empty($data->ews_no_solicitud) || 
                                 empty($data->ews_fecha_solicitud) ||
-                                empty($data->ews_hora_solicitud || 
+                                empty($data->ews_hora_solicitud) || 
                                 empty($data->ews_nombre) ||
                                 empty($data->ews_apellido_paterno) ||
                                 empty($data->ews_apellido_materno) ||
@@ -70,12 +71,11 @@ class API1Controller extends Controller
                                 empty($data->ews_telefono_avisar) ||
                                 empty($data->ews_agudeza_visual) ||
                                 empty($data->ews_lentes) ||
-                                empty($data->ews_tipo_sanguineo) ||
+                                empty($data->ews_tipo_sangre) ||
                                 empty($data->ews_estatura) ||
                                 empty($data->ews_padecimientos) ||
                                 empty($data->ews_donador) ||
                                 empty($data->ews_vigencia)
-                                )
                                 ){
 
                                         $saveAcceso = new TokenAcceso;
@@ -91,6 +91,47 @@ class API1Controller extends Controller
                                         $saveAcceso->save();
                                         return response()->json(array("wsp_mensaje" => 'falta información' ), 400);
                                         
+                                }
+                                $completo = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
+                                                        ->select('Dat_DatosGral.*','Lic_Licencias.*')
+                                                        ->where('Dat_Nombre','=',$data->ews_nombre)
+                                                        ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
+                                                        ->where('Dat_Materno','=',$data->ews_apellido_materno)
+                                                        ->where('Dat_CURP','=',$data->ews_curp)
+                                                        ->where('Lic_Expediente','=',$data->ews_licencia)
+                                                        ->orderby('Lic_Expedicion','asc')
+                                                        ->get();
+                                $curp = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
+                                                        ->select('Dat_DatosGral.*','Lic_Licencias.*')
+                                                        ->where('Dat_Nombre','=',$data->ews_nombre)
+                                                        ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
+                                                        ->where('Dat_Materno','=',$data->ews_apellido_materno)
+                                                        ->where('Dat_CURP','=',$data->ews_curp)
+                                                        ->orderby('Lic_Expedicion','asc')
+                                                        ->get();
+                                $expediente = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
+                                                        ->select('Dat_DatosGral.*','Lic_Licencias.*')
+                                                        ->where('Dat_Nombre','=',$data->ews_nombre)
+                                                        ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
+                                                        ->where('Dat_Materno','=',$data->ews_apellido_materno)
+                                                        ->where('Lic_Expediente','=',$data->ews_licencia)
+                                                        ->orderby('Lic_Expedicion','asc')
+                                                        ->get();
+                                if($curp == '[]'){
+                                        $persona = $expediente;
+                                        if($persona == '[]'){
+                                                return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
+                                        }
+                                }elseif($expediente == '[]'){
+                                        $persona = $curp;
+                                        if($persona == '[]'){
+                                                return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
+                                        }
+                                }else{
+                                        $persona = $completo;
+                                        if($persona == '[]'){
+                                                return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
+                                        }
                                 }
                                 
                                 $saveEstado = new Estado;
@@ -120,11 +161,16 @@ class API1Controller extends Controller
                                 $saveSolicitud->stripe_estado = '';
                                 $saveSolicitud->xml_url = '';
                                 $saveSolicitud->no_consulta = '0';
-                                $saveSolicitud->ews_nombre = $data->ews_nombre;
-                                $saveSolicitud->ews_apellido_paterno = $data->ews_apellido_paterno;
-                                $saveSolicitud->ews_apellido_materno = $data->ews_apellido_materno;
-                                $saveSolicitud->ews_curp = $data->ews_curp;
-                                $saveSolicitud->ews_licencia = $data->ews_licencia;
+
+                                foreach($persona as $dato){
+                                        $saveSolicitud->ews_nombre = $dato->Dat_Nombre;
+                                        $saveSolicitud->ews_apellido_paterno = $dato->Dat_Paterno;
+                                        $saveSolicitud->ews_apellido_materno = $dato->Dat_Materno;
+                                        $saveSolicitud->ews_curp = $dato->Dat_CURP;
+                                        $saveSolicitud->ews_licencia = $dato->Lic_Expediente;
+                                }
+                                /* esto va en la bd de paso */
+                                
                                 $saveSolicitud->ews_edad = $data->ews_edad;
                                 $saveSolicitud->ews_lugar_nacimiento = $data->ews_lugar_nacimiento;
                                 $saveSolicitud->ews_telefono = $data->ews_telefono;
@@ -135,7 +181,7 @@ class API1Controller extends Controller
                                 $saveSolicitud->ews_telefono_avisar = $data->ews_telefono_avisar;
                                 $saveSolicitud->ews_agudeza_visual = $data->ews_agudeza_visual;
                                 $saveSolicitud->ews_lentes = $data->ews_lentes;
-                                $saveSolicitud->ews_tipo_sanguineo = $data->ews_tipo_sanguineo;
+                                $saveSolicitud->ews_tipo_sanguineo = $data->ews_tipo_sangre;
                                 $saveSolicitud->ews_estatura = $data->ews_estatura;
                                 $saveSolicitud->ews_padecimientos = $data->ews_padecimientos;
                                 $saveSolicitud->ews_donador = $data->ews_donador;
@@ -152,7 +198,7 @@ class API1Controller extends Controller
                                 $no_solicitud_api->no_solicitud_api = date('Y').'-'.str_pad($id_save_solicitud, 4, "0", STR_PAD_LEFT);
                                 $no_solicitud_api->save();
 
-                                
+                                foreach($persona as $value){
                                         $cadena = (object)array(
                                                 '0' => (object)array(
                                                         '0' => (object)array(
@@ -160,15 +206,15 @@ class API1Controller extends Controller
                                                         ),
                                                         '1' => (object)array(
                                                                 '0' => 'Nombre',
-                                                                '1' => $data->ews_nombre
+                                                                '1' => $value->Dat_Nombre
                                                         ),
                                                         '2' =>(object)array(
                                                                 '0' => 'Apellido Paterno',
-                                                                '1' => $data->ews_apellido_paterno
+                                                                '1' => $value->Dat_Paterno
                                                         ),
                                                         '3' =>(object)array(
                                                                 '0' => 'Apellido Materno',
-                                                                '1' => $data->ews_apellido_materno
+                                                                '1' => $value->Dat_Materno
                                                         ),
                                                         '4' =>(object)array(
                                                                 '0' => 'Edad',
@@ -176,7 +222,7 @@ class API1Controller extends Controller
                                                         ),
                                                         '5' =>(object)array(
                                                                 '0' => 'CURP',
-                                                                '1' => $data->ews_curp
+                                                                '1' => $value->Dat_CURP
                                                         ),
                                                         '6' =>(object)array(
                                                                 '0' => 'Lugar de Nacimiento',
@@ -218,7 +264,7 @@ class API1Controller extends Controller
                                                         ),
                                                         '3' =>(object)array(
                                                                 '0' => 'Grupo Sanguineo',
-                                                                '1' => $data->ews_tipo_sanguineo
+                                                                '1' => $data->ews_tipo_sangre
                                                         ),
                                                         '4' =>(object)array(
                                                                 '0' => 'Padecimiento o alergias',
@@ -237,7 +283,9 @@ class API1Controller extends Controller
                                                                 '1' => $data->ews_vigencia
                                                         )
                                                 )     
-                                        );        
+                                        );
+                                }
+                                                
                         
                         if($data->ews_vigencia == '2 años'){
                                 $vigencia_años = '2';

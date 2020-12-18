@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION','DB_CONNECTION2', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -48,8 +48,8 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => env('DB_DATABASE', 'bd_motociclista'),
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -80,12 +80,11 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('sqlsrv_HOST', 'DESKTOP-K7SRFDS\SQLEXPRESS'),
+            'port' => env('sqlsrv_PORT', '1433'),
+            'database' => env('sqlsrv_DATABASE', 'KIMERA'),
+            'username' => env('sqlsrv_USERNAME', 'sa'),
+            'password' => env('sqlsrv_PASSWORD', '1234'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
