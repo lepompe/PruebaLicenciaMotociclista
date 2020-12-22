@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use App\Estado;
 use App\Solicitud;
 use App\Token;
@@ -19,6 +20,7 @@ class API1Controller extends Controller
                 foreach($token_web_form as $value){
                         $token_web = $value->token;
                 }
+                
                 $data = [
                         "ews_token" => strip_tags(trim($request->input('ews_token'))),
                         "ews_no_solicitud" => strip_tags(trim($request->input('ews_no_solicitud'))),
@@ -99,6 +101,7 @@ class API1Controller extends Controller
                                                         ->where('Dat_Materno','=',$data->ews_apellido_materno)
                                                         ->where('Dat_CURP','=',$data->ews_curp)
                                                         ->where('Lic_Expediente','=',$data->ews_licencia)
+                                                        ->where('TipLic_Id','=','3')
                                                         ->orderby('Lic_Expedicion','asc')
                                                         ->get();
                                 $curp = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
@@ -107,6 +110,7 @@ class API1Controller extends Controller
                                                         ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
                                                         ->where('Dat_Materno','=',$data->ews_apellido_materno)
                                                         ->where('Dat_CURP','=',$data->ews_curp)
+                                                        ->where('TipLic_Id','=','3')
                                                         ->orderby('Lic_Expedicion','asc')
                                                         ->get();
                                 $expediente = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
@@ -115,29 +119,94 @@ class API1Controller extends Controller
                                                         ->where('Dat_Paterno','=',$data->ews_apellido_paterno)
                                                         ->where('Dat_Materno','=',$data->ews_apellido_materno)
                                                         ->where('Lic_Expediente','=',$data->ews_licencia)
+                                                        ->where('TipLic_Id','=','3')
                                                         ->orderby('Lic_Expedicion','asc')
                                                         ->get();
                                 if($curp == '[]'){
                                         $persona = $expediente;
                                         if($persona == '[]'){
+                                                $saveAcceso = new TokenAcceso;
+                                                foreach($token_web_form as $id_token){
+                                                        $saveAcceso->id_token = $id_token->id_token;
+                                                }
+                                                $saveAcceso->fecha = date('Y-m-d');
+                                                $saveAcceso->hora = date('H:i:s');
+                                                $saveAcceso->ip = $request->ip();
+                                                $saveAcceso->dato_clave = $data->ews_licencia;
+                                                $saveAcceso->mensaje = 'ciudadano no encontrado';
+                                                $saveAcceso->codigo = '404';
+                                                $saveAcceso->save();
                                                 return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
                                         }
                                 }elseif($expediente == '[]'){
                                         $persona = $curp;
                                         if($persona == '[]'){
+                                                $saveAcceso = new TokenAcceso;
+                                                foreach($token_web_form as $id_token){
+                                                        $saveAcceso->id_token = $id_token->id_token;
+                                                }
+                                                $saveAcceso->fecha = date('Y-m-d');
+                                                $saveAcceso->hora = date('H:i:s');
+                                                $saveAcceso->ip = $request->ip();
+                                                $saveAcceso->dato_clave = $data->ews_licencia;
+                                                $saveAcceso->mensaje = 'ciudadano no encontrado';
+                                                $saveAcceso->codigo = '404';
+                                                $saveAcceso->save();
                                                 return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
                                         }
                                 }else{
                                         $persona = $completo;
                                         if($persona == '[]'){
+                                                $saveAcceso = new TokenAcceso;
+                                                foreach($token_web_form as $id_token){
+                                                        $saveAcceso->id_token = $id_token->id_token;
+                                                }
+                                                $saveAcceso->fecha = date('Y-m-d');
+                                                $saveAcceso->hora = date('H:i:s');
+                                                $saveAcceso->ip = $request->ip();
+                                                $saveAcceso->dato_clave = $data->ews_licencia;
+                                                $saveAcceso->mensaje = 'ciudadano no encontrado';
+                                                $saveAcceso->codigo = '404';
+                                                $saveAcceso->save();
                                                 return response()->json(['wsp_mensaje'=>'ciudadano no encontrado'], 404);
                                         }
                                 }
-                                
-                                $saveEstado = new Estado;
-                                $saveEstado->nombre = 'INICIADO';
-                                $saveEstado->save();
-                              
+
+                                foreach($persona as $per){
+                                        $nombre_persona = $per->Dat_Nombre;
+                                        $paterno_persona = $per->Dat_Paterno;
+                                        $materno_persona = $per->Dat_Materno;
+                                        $licencia_persona = $per->Lic_Expediente;
+                                }
+
+                                    $client = new \GuzzleHttp\Client(['base_uri' => 'http://10.33.103.90/infraccion/constancia_no_infraccion/api/']);
+                                    /* $resultado = $client->request('POST', [
+                                            "ews_token" >= '90e849baff59a2dd03065465fe7151c56e9cf9868011a9c8ca8be74d6992f1f6ac5417cf9cdfaa5f03a731bae083143604daa8946e2ad2552ae3bbdc28ae754c',
+                                            "ews_no_solicitud" >= $data->ews_no_solicitud,
+                                            "ews_id_identidad" >= '7',
+                                            "ews_nombre" >= $nombre_persona,
+                                            "ews_apellido_paterno" >= $paterno_persona,
+                                            "ews_apellido_materno" >= $materno_persona,
+                                            "ews_licencia_conducir" >=  $licencia_persona
+                                            
+                                    ]); */
+                                        $request = new \GuzzleHttp\Psr7\Request('POST', 'v1/infracciones/find');
+                                        $respuesta = $client->send($request, [
+                                                "ews_token" >= '90e849baff59a2dd03065465fe7151c56e9cf9868011a9c8ca8be74d6992f1f6ac5417cf9cdfaa5f03a731bae083143604daa8946e2ad2552ae3bbdc28ae754c',
+                                                "ews_no_solicitud" >= $data->ews_no_solicitud,
+                                                "ews_id_identidad" >= '7',
+                                                "ews_nombre" >= $nombre_persona,
+                                                "ews_apellido_paterno" >= $paterno_persona,
+                                                "ews_apellido_materno" >= $materno_persona,
+                                                "ews_licencia_conducir" >=  $licencia_persona
+                                        ]);
+                                        $array = json_decode($respuesta->getBody(),true);
+                                        return $array;
+                                    /* $dato=$array['wsp_mensaje']; */ 
+                                    
+                                   
+                                    
+        
                                 $saveSolicitud = new Solicitud;
                                 $saveSolicitud->llave = $data->ews_llave;
                                 $saveSolicitud->id_tramite = $data->ews_id_tramite;
@@ -147,7 +216,7 @@ class API1Controller extends Controller
                                 $saveSolicitud->no_solicitud_api = '';
                                 $saveSolicitud->fecha_solicitud_api = date('Y-m-d');
                                 $saveSolicitud->hora_solicitud_api = date('H:i:s');
-                                $saveSolicitud->id_estado = $saveEstado->id_estado;
+                                $saveSolicitud->id_estado = '1';
                                 $saveSolicitud->id_electronico = '';
                                 $saveSolicitud->referencia_pago = '';
                                 $saveSolicitud->fecha_pago = date('Y-m-d');
@@ -169,8 +238,8 @@ class API1Controller extends Controller
                                         $saveSolicitud->ews_curp = $dato->Dat_CURP;
                                         $saveSolicitud->ews_licencia = $dato->Lic_Expediente;
                                 }
-                                /* esto va en la bd de paso */
                                 
+                                /* para la bd de paso */
                                 $saveSolicitud->ews_edad = $data->ews_edad;
                                 $saveSolicitud->ews_lugar_nacimiento = $data->ews_lugar_nacimiento;
                                 $saveSolicitud->ews_telefono = $data->ews_telefono;
@@ -193,6 +262,7 @@ class API1Controller extends Controller
                                 $saveSolicitud->save();
                                 
                                 $nombre_accidente = $data->ews_nombre_avisar." ".$data->ews_apellido_paterno_avisar." ".$data->ews_apellido_materno_avisar;
+                                
                                 $id_save_solicitud = $saveSolicitud->id_solicitud;
                                 $no_solicitud_api = Solicitud::find($id_save_solicitud);
                                 $no_solicitud_api->no_solicitud_api = date('Y').'-'.str_pad($id_save_solicitud, 4, "0", STR_PAD_LEFT);
