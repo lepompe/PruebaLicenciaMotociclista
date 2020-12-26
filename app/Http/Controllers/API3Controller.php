@@ -13,9 +13,8 @@ class API3Controller extends Controller
 {
     
     public function verpdf(Request $request){
-        
         date_default_timezone_set('America/Cancun');
-
+        
         $token_web_form = token::select('tokens.*')->where('id_token','=','1')->get();
 
         foreach($token_web_form as $value){
@@ -39,6 +38,7 @@ class API3Controller extends Controller
                 $solicitud = Solicitud::select('solicitudes.*')->where('no_solicitud','=',$data->ews_no_solicitud)->get();
                 
                 foreach($solicitud as $value){
+                        $fecha_solicitud = $value->fecha_solicitud;
                         $id_solicitud = $value->id_solicitud;
                         $id_estado = $value->id_estado;
                         $id_electronico = $value->id_electronico;
@@ -58,13 +58,13 @@ class API3Controller extends Controller
                 $nombre_accidente = $nombre_avisar." ".$paterno_avisar." ".$materno_avisar;
 
                 if($vigencia=='2 años'){
-                    $vigencia_años = '2';
+                    $vigencia_años = '2 years';
                 }elseif($vigencia=='3 años'){
-                    $vigencia_años = '3';
+                    $vigencia_años = '3 years';
                 }elseif($vigencia=='4 años'){
-                    $vigencia_años = '4';
+                    $vigencia_años = '4 years';
                 }elseif($vigencia=='5 años'){
-                    $vigencia_años = '5';
+                    $vigencia_años = '5 years';
                 }
                 
                 $con_curp = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
@@ -111,15 +111,16 @@ class API3Controller extends Controller
                 $saveConsulta->no_consulta = ++$no_consulta;
                 $saveConsulta->save();
 
-                $fecha = mktime(0, 0, 0, date("m"), date("d"), date("Y") + $vigencia_años);
-                $nuevafecha = date('d/m/Y', $fecha);
+                $fecha = date_create($fecha_solicitud);
+                $años = date_add($fecha, date_interval_create_from_date_string($vigencia_años));
+                $nuevafecha = date_format($años,'d/m/Y');
 
                 $nombre_archivo = md5(date('Y-m-d H:i:s').rand()).".png";
                 $qr = \QrCode::format('png')->size('200')->generate('https://potys.gob.mx/validatramite/?id='.$id_electronico);
                 \Storage::disk('qrcodes')->put($nombre_archivo,$qr);
 
                 $nombrepdf = $datos_licencia.md5(date('Y-m-d H:i:s').rand()).".pdf";
-                $pdf = \PDF::loadView('layouts/pdf_invalido', compact('sexo_persona','nombre_accidente','persona','persona_solicitud','nuevafecha','nombre_archivo','nombrepdf'));
+                $pdf = \PDF::loadView('layouts/pdf_invalido', compact('sexo_persona','nombre_accidente','persona','nuevafecha','persona_solicitud','nombre_archivo','nombrepdf'));
                 $pdf->setPaper(array(0, -50, 330, 900), 'portrait');
 
                 $updateEstado = Estado::find($id_estado);

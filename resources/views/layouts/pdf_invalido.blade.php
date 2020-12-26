@@ -33,7 +33,7 @@
         <p>{{strftime("%d/"."%m"."/%Y",strtotime($persona->Dat_fecnac))}}</p>
     </div>
     <div class="expedicion">
-        <p>{{date('d/m/Y')}}</p>
+        <p>{{strftime("%d/"."%m"."/%Y",strtotime($persona_solicitud->fecha_solicitud))}}</p>
     </div>
     <div class="vencimiento">
         <p>{{$nuevafecha}}</p>
