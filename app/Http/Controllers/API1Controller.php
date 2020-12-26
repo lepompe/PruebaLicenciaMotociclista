@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-use App\Estado;
 use App\Solicitud;
 use App\Token;
 use App\TokenAcceso;
@@ -179,19 +178,8 @@ class API1Controller extends Controller
                                         $licencia_persona = $per->Lic_Expediente;
                                 }
 
-                                    $client = new \GuzzleHttp\Client(['base_uri' => 'http://10.33.103.90/infraccion/constancia_no_infraccion/api/']);
-                                    /* $resultado = $client->request('POST', [
-                                            "ews_token" >= '90e849baff59a2dd03065465fe7151c56e9cf9868011a9c8ca8be74d6992f1f6ac5417cf9cdfaa5f03a731bae083143604daa8946e2ad2552ae3bbdc28ae754c',
-                                            "ews_no_solicitud" >= $data->ews_no_solicitud,
-                                            "ews_id_identidad" >= '7',
-                                            "ews_nombre" >= $nombre_persona,
-                                            "ews_apellido_paterno" >= $paterno_persona,
-                                            "ews_apellido_materno" >= $materno_persona,
-                                            "ews_licencia_conducir" >=  $licencia_persona
-                                            
-                                    ]); */
-                                        $request = new \GuzzleHttp\Psr7\Request('POST', 'v1/infracciones/find');
-                                        $respuesta = $client->send($request, [
+                                        /* $client = new \GuzzleHttp\Client(['base_uri' => 'http://10.33.103.90/infraccion/constancia_no_infraccion/api/v1/infracciones/']);
+                                        $respuesta = $client->request('POST', 'find',[
                                                 "ews_token" >= '90e849baff59a2dd03065465fe7151c56e9cf9868011a9c8ca8be74d6992f1f6ac5417cf9cdfaa5f03a731bae083143604daa8946e2ad2552ae3bbdc28ae754c',
                                                 "ews_no_solicitud" >= $data->ews_no_solicitud,
                                                 "ews_id_identidad" >= '7',
@@ -202,7 +190,7 @@ class API1Controller extends Controller
                                         ]);
                                         $array = json_decode($respuesta->getBody(),true);
                                         return $array;
-                                    /* $dato=$array['wsp_mensaje']; */ 
+                                    $dato=$array['wsp_mensaje']; */
                                     
                                    
                                     

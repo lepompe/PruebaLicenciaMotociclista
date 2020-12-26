@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Tramite>
+        <Documento>
+                <no_solicitud>2020-0000000002</no_solicitud>
+                <fecha_solicitud>2020-12-26</fecha_solicitud>
+                <hora_solicitud>19:27:52</hora_solicitud>
+                <id_electronico>1a2b3c4d5e7r8t9f0f1g</id_electronico>
+                <referencia_pago>9300-0000-9281-82</referencia_pago>
+                <fecha_pago>2020-02-23</fecha_pago>
+                <hora_pago>02:25:00</hora_pago>
+                <stripe_orden_id>6735</stripe_orden_id>
+                <stripe_creado>1583253990</stripe_creado>
+                <stripe_mensaje>Payment complete</stripe_mensaje>
+                <stripe_tipo>authorized</stripe_tipo>
+                <stripe_digitos>8001</stripe_digitos>
+                <stripe_red>visa</stripe_red>
+                <stripe_estado>succeeded</stripe_estado>
+                <nombres>ENRIQUE ANTONIO</nombres>
+                <apellido_paterno>CRUZ</apellido_paterno>
+                <apellido_materno>LUNA</apellido_materno>
+                <edad>26</edad>
+                <lugar_nacimiento>Felipe Carrillo Puerto</lugar_nacimiento>
+                <telefono>9831042196</telefono>
+                <nombre_avisar>elena elizabeth</nombre_avisar>
+                <apellido_paterno_avisar>medina</apellido_paterno_avisar>
+                <apellido_materno_avisar>pacheco</apellido_materno_avisar>
+                <telefono_avisar>9831143032</telefono_avisar>
+                <direccion_avisar>calle 53/68 y av. Benito Juarez, Colonia Juan Bautista Vega #876</direccion_avisar>
+                <agudeza_visual>buena</agudeza_visual>
+                <lentes>no</lentes>
+                <tipo_sanguineo>O+</tipo_sanguineo>
+                <estatura>180</estatura>
+                <padecimientos>diabetes</padecimientos>
+                <donador>no</donador>
+                <vigencia>4 años</vigencia>
+        </Documento>
+        <Firma_Electronica>
+                <Hash></Hash>
+                <Hash_Validado></Hash_Validado>
+                <Descripcion></Descripcion>
+                <Fecha_Validez></Fecha_Validez>
+        </Firma_Electronica>
+</Tramite>

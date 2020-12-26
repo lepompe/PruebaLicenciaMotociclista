@@ -18,5 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/API1','API1Controller@datos_motociclista');
-Route::post('/API2','API2Controller@crearqr');
-Route::post('/API3','API3Controller@datos_motociclista');
+Route::post('/API2','API2Controller@xml');
+Route::get('/API3/{nombres}/{apellido_paterno}/{apellido_materno}/{curp}/{numero_licencia}','API3Controller@pruebaspdf');
+Route::post('/API3','API3Controller@verpdf');

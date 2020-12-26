@@ -1,0 +1,114 @@
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 90%;
+}
+.plantilla {
+    position: fixed; 
+    text-align: center;
+    z-index: 0;
+}
+.nombre {
+    position: fixed;
+    top: 10%;
+    left: 45%;
+    font-style: bold;
+    font-size: 130%;
+}
+
+.tipo_licencia {
+    position: fixed;
+    top: 24.3%;
+    left: 47%;
+    
+    color: white;
+    text-align: left;
+    line-height: 1px;
+    
+}
+p.descripcion {
+    font-style: bold;
+}
+.curp {
+    position: fixed;
+    top: 27.5%;
+    left: 45%;
+    font-style: bold;
+}
+.nacionalidad {
+    position: fixed;
+    top: 30.5%;
+    left: 45%;
+    font-style: bold;
+}
+.fecha_nacimiento {
+    position: fixed;
+    top: 33.5%;
+    left: 45%;
+    font-style: bold;
+}
+.expedicion {
+    position: fixed;
+    top: 36.5%;
+    left: 45%;
+    font-style: bold;
+}
+.vencimiento {
+    position: fixed;
+    top: 39.5%;
+    left: 45%;
+    font-style: bold;
+}
+.direccion {
+    position: fixed;
+    top: 42.3%;
+    left: 35%;
+    font-style: bold;
+}
+.genero {
+    position: fixed;
+    top: 48.5%;
+    left: 45%;
+    font-style: bold;
+}
+.telefono {
+    position: fixed;
+    top: 51.5%;
+    left: 45%;
+    font-style: bold;
+}
+.lentes {
+    position: fixed;
+    top: 54.5%;
+    left: 45%;
+    font-style: bold;
+}
+.alergias_enfermedades {
+    position: fixed;
+    top: 57.5%;
+    left: 45%;
+    font-style: bold;
+}
+.donador {
+    position: fixed;
+    top: 60.5%;
+    left: 45%;
+    font-style: bold;
+}
+.tipo_sangre {
+    position: fixed;
+    top: 63.5%;
+    left: 45%;
+    font-style: bold;
+}
+.avisar {
+    position: fixed;
+    top: 68.5%;
+    right: 20%;
+    font-style: bold;
+    line-height: 1px;
+}
+.qr {
+    position: fixed;
+    top: 72.5%;
+    left: 40%;
+}

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Solicitud;
+use App\Token;
+use App\datoGral;
 
 class API2Controller extends Controller
 {
@@ -56,7 +59,6 @@ class API2Controller extends Controller
                 $solicitud = Solicitud::select('solicitudes.*')->where('no_solicitud','=',$data->ews_no_solicitud)->get();
                 
                 foreach($solicitud as $value){
-                        $id_estado = $value->id_estado;
                         $id_solicitud = $value->id_solicitud;
                         $no_solicitud_api = $value->no_solicitud_api;
                         $f_solicitud = $value->fecha_solicitud;
@@ -80,20 +82,17 @@ class API2Controller extends Controller
                         
                 }
                 
-                $updateEstado = Solicitud::find($id_solicitud);
-                $updateEstado->id_estado = '3';
-                $updateEstado->save();
+                $saveSolicitud = Solicitud::find($id_solicitud);
+                $saveSolicitud->id_estado = '3';
+                $saveSolicitud->save();
 
                 $persona = datoGral::join('dbo.Lic_Licencias','Lic_Licencias.Dat_Id','=','Dat_DatosGral.Dat_id')
                         ->join('dbo.TipLic_TipoLicencia', 'TipLic_TipoLicencia.TipLic_id', '=', 'Lic_Licencias.TipLic_Id')
                         ->select('Dat_DatosGral.Dat_Nombre',
                         'Dat_DatosGral.Dat_Paterno',
                         'Dat_DatosGral.Dat_Materno',
-                        'Lic_Licencias.Lic_Expediente',
-                        'Lic_Licencias.Lic_Expedicion',
-                        'Lic_Licencias.Lic_Vencimiento',
-                        'TipLic_TipoLicencia.TipLic_Descripcion')
-                        ->where('Dat_DatosGral.Dat_Folio','=',$no_licencia_api)
+                        'Lic_Licencias.Lic_Expediente')
+                        ->where('Lic_Licencias.Lic_Expediente','=',$no_licencia_api)
                         ->get();
 
                 foreach($persona as $value){
@@ -170,9 +169,9 @@ class API2Controller extends Controller
                 $saveSolicitud->xml_url = $url;
                 $saveSolicitud->save();
 
-                $updateEstado = Solicitud::find($id_estado);
-                $updateEstado->id_estado = '5';
-                $updateEstado->save();
+                $saveSolicitud = Solicitud::find($id_solicitud);
+                $saveSolicitud->id_estado = '5';
+                $saveSolicitud->save();
                 return response()->json(['wsp_mensaje'=>'Xml Generado',
                                                 'wsp_no_Solicitud'=>$data->ews_no_solicitud,
                                                 'wsp_no_Solicitud_api'=>$no_solicitud_api,
