@@ -11,7 +11,11 @@ use App\Estado;
 
 class API3Controller extends Controller
 {
+    
     public function verpdf(Request $request){
+        
+        date_default_timezone_set('America/Cancun');
+
         $token_web_form = token::select('tokens.*')->where('id_token','=','1')->get();
 
         foreach($token_web_form as $value){

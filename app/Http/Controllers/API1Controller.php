@@ -13,7 +13,8 @@ class API1Controller extends Controller
 {
     public function datos_motociclista(Request $request) 
         {
-                
+                date_default_timezone_set('America/Cancun');
+                        
                 $token_web_form = Token::select('tokens.*')->where('id_token','=','1')->get();
 
                 foreach($token_web_form as $value){
