@@ -7,6 +7,12 @@ p {
     text-align: center;
     z-index: 0;
 }
+.plantilla img{
+    top: 1%;
+    width: 129%;
+    height: auto;
+    
+}
 .nombre {
     position: fixed;
     top: 10%;
