@@ -182,7 +182,7 @@ class API1Controller extends Controller
                                         /* $client = new \GuzzleHttp\Client(['base_uri' => 'http://10.33.103.90/infraccion/constancia_no_infraccion/api/v1/infracciones/']);
                                         $respuesta = $client->request('POST', 'find',[
                                                 "ews_token" >= '90e849baff59a2dd03065465fe7151c56e9cf9868011a9c8ca8be74d6992f1f6ac5417cf9cdfaa5f03a731bae083143604daa8946e2ad2552ae3bbdc28ae754c',
-                                                "ews_no_solicitud" >= $data->ews_no_solicitud,
+                                                
                                                 "ews_id_identidad" >= '7',
                                                 "ews_nombre" >= $nombre_persona,
                                                 "ews_apellido_paterno" >= $paterno_persona,
